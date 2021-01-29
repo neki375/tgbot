@@ -3,12 +3,16 @@ import requests
 import json
 from datetime import datetime
 import urllib3
+import os
+from globals import conf
+
+conf = conf()
 
 
 urllib3.disable_warnings()
-weather_token = "16ccdba09622a78739f287ca85fe517b"
-telegram_token = "1621911623:AAGeLq1oRgClWRcbtld4MZ-XLO9FAdhxUeg"
-money_token = "33412d7bfc256accbcdcab19f0a5e2e4"
+weather_token = conf["weather_token"]
+telegram_token = conf["telegram_token"]
+money_token = conf["money_token"]
 keyboard1 = telebot.types.ReplyKeyboardMarkup()
 bot = telebot.TeleBot(telegram_token)
 
