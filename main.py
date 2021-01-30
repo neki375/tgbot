@@ -1,14 +1,13 @@
+import os
+import json
+import urllib3
 import telebot
 import requests
-import json
-from datetime import datetime
-import urllib3
-import os
 from globals import conf
+from datetime import datetime
+
 
 conf = conf()
-
-
 urllib3.disable_warnings()
 weather_token = conf["weather_token"]
 telegram_token = conf["telegram_token"]
@@ -32,6 +31,7 @@ def date_format(time):
 
 
 def get_course_of_money(money_token, value1, count:int, value2="RUB"):
+	print("{}{}{}".format(value1, count, value2))
 	count = int(count)
 	money_url= "https://currate.ru/api/?get=rates&pairs={}&key={}".format("{}{}".format(value1, value2), money_token)
 	http = urllib3.PoolManager()
@@ -43,7 +43,7 @@ def get_course_of_money(money_token, value1, count:int, value2="RUB"):
 			info["name"] = k
 			info["value"] = float(v) * count if count else v
 		if count:
-			if count > 1:
+			if count >= 1:
 				return "В {} {} {} рублей".format(count, value1, info["value"])
 		else:
 			return "В 1 {} {} рублей".format(value1, info["value"])
@@ -69,45 +69,26 @@ def get_details(data):
 
 def get_weather(weather_token, city):
 	print(city)
-	if city == "пошел нах":
-		info =  "Сам иди шкура"
-	elif city == "Пошел нах":
-		info =  "Сам иди шкура"
-	elif city == "пидор":
-		info =  "Сам пидор"
-	elif city == "Пидор":
-		info =  "Сам пидор"
-	elif city == "Иди нах":
-		info =  "Сам иди шкура"
-	elif city == "иди нахуй":
-		info =  "Сам иди шкура"
-	elif city == "Иди нахуй":
-		info =  "Сам иди шкура"
-	elif city == "Пошел нахуй":
-		info =  "Сам иди шкура"
-	elif city == "Пошёл нахуй":
-		info =  "Сам иди шкура"
-	else:
-		weather_url = "http://api.openweathermap.org/data/2.5/weather?q={city}&lang=ru&appid={weather_token}&units=metric".format(
-			city=city, 
-			weather_token=weather_token
-		)
-		res = requests.get(weather_url)
-		data = res.json()
-		print(data)
-		if "message" in data:
-			return "Такого города не существует"
-		details = get_details(data)
-		info = "В городе {} сейчас {}° \nОщущается как {}° \n{}\nСкорость ветра {} м/с\nВосход солнца в {}\nЗакат в {}".format(
-			city.capitalize(),
-			details["temp"],
-			details["feels_temp"],
-			details["weather"].capitalize(),
-			details["wind"],
-			details["sunrise"],
-			details["sunset"]
+	weather_url = "http://api.openweathermap.org/data/2.5/weather?q={city}&lang=ru&appid={weather_token}&units=metric".format(
+		city=city, 
+		weather_token=weather_token
+	)
+	res = requests.get(weather_url)
+	data = res.json()
+	print(data)
+	if "message" in data:
+		return "Такого города не существует"
+	details = get_details(data)
+	info = "В городе {} сейчас {}° \nОщущается как {}° \n{}\nСкорость ветра {} м/с\nВосход солнца в {}\nЗакат в {}".format(
+		city.capitalize(),
+		details["temp"],
+		details["feels_temp"],
+		details["weather"].capitalize(),
+		details["wind"],
+		details["sunrise"],
+		details["sunset"]
 
-		)
+	)
 
 	return info
 
