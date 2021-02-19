@@ -89,7 +89,7 @@ def get_weather(weather_token, city):
 def start_message(message):
     bot.send_message(message.chat.id, 'Привет, введи имя города в котором тебя интересует погода например Москва')
     bot.send_message(message.chat.id, 'Или валюту чтобы узнать ее курс к рублю например USD или USD 20 где 20 это количество USD')
-    bot.send_message(message.chat.id, 'Хочешь пасхалку?? Напиши боту путин вор')
+    bot.send_message(message.chat.id, 'Хочешь пасхалку?? Напиши боту путин')
 
 
 # @bot.message_handler(commands=['list'])
